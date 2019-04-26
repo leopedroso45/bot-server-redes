@@ -30,6 +30,8 @@ class User {
     }
 }
 
+
+
 public class Server {
 
     HashMap<String, User> userList;
@@ -42,24 +44,29 @@ public class Server {
         server.bind(new InetSocketAddress("localhost", 40289));
 
         InetAddress inet = server.getInetAddress();
-        System.out.println("HostAddress: " + inet.getHostAddress());
-        System.out.println("HostName: " + inet.getHostName());
-        System.out.println("Porta: " + server.getLocalPort());
+        Console.log("HostAddress: " + inet.getHostAddress());
+        Console.log("HostName: " + inet.getHostName());
+        Console.log("Porta: " + server.getLocalPort());
 
         while (true) {
-            System.out.println("Esperando conexão");
+            Console.log("Esperando conexão");
             Socket cliente = server.accept();
-            System.out.println("Cliente conectou");
+            Console.log("Cliente conectou");
 
             Thread t = new Thread(() -> {
                 try {
-                    Scanner entrada = new Scanner(cliente.getInputStream());
-                    while (entrada.hasNext()) {
-                        System.out.println(entrada.next() + " " + entrada.nextLine());
-                    }
+                    InputStreamReader inputStreamReader  = new InputStreamReader(cliente.getInputStream());
+                    BufferedReader entrada = new BufferedReader(inputStreamReader);
+
                     PrintStream saida = new PrintStream(cliente.getOutputStream());
-                    saida.println("saidaaaaa");
-                    saida.flush();
+                    String linha = entrada.readLine();
+                    while (linha!=null && !linha.equals("exit")) {
+                        Console.log(linha);
+                        saida.println("Server Response: "+linha);
+                        linha = entrada.readLine();
+                    }
+                    saida.println("end");
+                    Console.log("saiu");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -117,9 +124,9 @@ class Request {
         pw.flush();
         BufferedReader br = new BufferedReader(new InputStreamReader(s.getInputStream()));
         String t;
-        System.out.println("indo");
-        while ((t = br.readLine()) != null) System.out.println(t);
-        System.out.println("foi");
+        Console.log("indo");
+        while ((t = br.readLine()) != null) Console.log(t);
+        Console.log("foi");
 
 
     }

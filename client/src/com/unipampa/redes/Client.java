@@ -37,20 +37,18 @@ class Request {
         Socket s = new Socket(InetAddress.getByName(url), port);
         s.setKeepAlive(true);
         PrintWriter pw = new PrintWriter(s.getOutputStream());
-        pw.println("DELETE " + subpage + " HTTP/1.1");
+        pw.println("POST " + subpage + " HTTP/1.1");
         pw.println("Host: " + url);
         pw.println("");
+        pw.println("Agora vou mandar o comando de sair dessa porra");
+        pw.println("exit");
         pw.flush();
         BufferedReader br = new BufferedReader(new InputStreamReader(s.getInputStream()));
         String t;
-        System.out.println("indo");
-        while ((t = br.readLine()) != null) System.out.println(t);
-        System.out.println("foi");
-
-
-        br = new BufferedReader(new InputStreamReader(s.getInputStream()));
-        while ((t = br.readLine()) != null) System.out.println(t);
-
-
+        System.out.println("Resposta: ");
+        while ((t = br.readLine()) != null && !t.equals("end")){
+            System.out.println(t);
+        }
+        System.out.println("Saiiiii");
     }
 }
